@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli - Palet Satış</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="notification" class="notification" style="display: none;"></div>
+
+    <!-- Admin Login -->
+    <div id="loginContainer" class="login-container">
+        <div class="login-box">
+            <h2>Admin Paneli</h2>
+            <p>Lütfen giriş yapınız</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Kullanıcı Adı</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Şifre</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Giriş Yap</button>
+                <p class="hint">Demo: admin / admin123</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="admin-dashboard" style="display: none;">
+        <header class="header admin-header">
+            <div class="container">
+                <h1>✓ Admin Paneli</h1>
+                <button id="logoutBtn" class="btn btn-secondary">Çıkış Yap</button>
+            </div>
+        </header>
+
+        <div class="admin-container">
+            <div class="sidebar">
+                <nav class="admin-nav">
+                    <a href="#" data-section="dashboard" class="nav-item active">
+                        📊 Pano
+                    </a>
+                    <a href="#" data-section="messages" class="nav-item">
+                        📧 Mesajlar
+                    </a>
+                    <a href="#" data-section="paletler" class="nav-item">
+                        📦 Paletler
+                    </a>
+                    <a href="#" data-section="kategori" class="nav-item">
+                        🏷️ Kategoriler
+                    </a>
+                    <a href="#" data-section="raporlar" class="nav-item">
+                        📈 Raporlar
+                    </a>
+                    <a href="#" data-section="settings" class="nav-item">
+                        ⚙️ Ayarlar
+                    </a>
+                </nav>
+            </div>
+
+            <main class="admin-content">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="admin-section active">
+                    <h2>Hoş Geldiniz! 👋</h2>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-icon">📦</div>
+                            <div class="card-info">
+                                <h4>Toplam Palet</h4>
+                                <p id="statTotalPaletler">0</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="card-icon">💰</div>
+                            <div class="card-info">
+                                <h4>Toplam Değer</h4>
+                                <p id="statTotalDeger">₺0</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="card-icon">📧</div>
+                            <div class="card-info">
+                                <h4>Yeni Mesaj</h4>
+                                <p id="statYeniMesaj">0</p>
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="card-icon">📍</div>
+                            <div class="card-info">
+                                <h4>Depo Sayısı</h4>
+                                <p id="statDepoSayisi">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-section">
+                        <h3>Son Paletler</h3>
+                        <div id="recentPaletler" class="recent-list">
+                            <p>Paletler yükleniyor...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="recent-section">
+                        <h3>Son Mesajlar</h3>
+                        <div id="recentMessages" class="recent-list">
+                            <p>Mesajlar yükleniyor...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mesajlar Section -->
+                <section id="messages-section" class="admin-section">
+                    <h2>Gelen Mesajlar</h2>
+                    <div class="message-stats">
+                        <div class="stat-box">
+                            <h4>Toplam Mesaj</h4>
+                            <p id="totalMessages">0</p>
+                        </div>
+                        <div class="stat-box">
+                            <h4>Okunmamış</h4>
+                            <p id="unreadMessages">0</p>
+                        </div>
+                        <div class="stat-box">
+                            <h4>Cevaplanan</h4>
+                            <p id="repliedMessages">0</p>
+                        </div>
+                    </div>
+
+                    <div class="filters">
+                        <select id="statusFilter" class="filter-input">
+                            <option value="">Tüm Durumlar</option>
+                            <option value="new">Yeni</option>
+                            <option value="read">Okundu</option>
+                            <option value="replied">Cevaplandı</option>
+                        </select>
+                    </div>
+
+                    <div id="messagesList" class="messages-list">
+                        <div class="loading">Mesajlar yükleniyor...</div>
+                    </div>
+                </section>
+
+                <!-- Paletler Section -->
+                <section id="paletler-section" class="admin-section">
+                    <div class="section-header">
+                        <h2>Palet Yönetimi</h2>
+                        <button class="btn btn-primary btn-sm" onclick="openPaletModal()">➕ Yeni Palet</button>
+                    </div>
+                    <div class="paletler-filters">
+                        <input type="text" id="paletFilter" placeholder="Palet ara..." class="filter-input">
+                        <select id="locationFilterPalet" class="filter-input">
+                            <option value="">Tüm Şehirler</option>
+                        </select>
+                    </div>
+                    <div id="paletlerList" class="paletler-grid">
+                        <div class="loading">Paletler yükleniyor...</div>
+                    </div>
+                </section>
+
+                <!-- Kategori Section -->
+                <section id="kategori-section" class="admin-section">
+                    <div class="section-header">
+                        <h2>Kategori Yönetimi</h2>
+                        <button class="btn btn-primary btn-sm" onclick="openCategoryModal()">➕ Yeni Kategori</button>
+                    </div>
+                    <div class="categories-grid">
+                        <div id="categoriesList" class="categories-list">
+                            <p>Kategoriler yükleniyor...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Raporlar Section -->
+                <section id="raporlar-section" class="admin-section">
+                    <h2>Raporlar ve İstatistikler</h2>
+                    <div class="reports-container">
+                        <div class="report-card">
+                            <h3>Palet Envanteri Raporu</h3>
+                            <button class="btn btn-secondary" onclick="generatePaletReport()">📥 İndir</button>
+                        </div>
+                        <div class="report-card">
+                            <h3>Şehir Bazlı Dağılım</h3>
+                            <div id="cityDistribution" class="report-data">
+                                <p>Yükleniyor...</p>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <h3>Fiyat Aralığı Analizi</h3>
+                            <div id="priceAnalysis" class="report-data">
+                                <p>Yükleniyor...</p>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <h3>Mesaj İstatistikleri</h3>
+                            <button class="btn btn-secondary" onclick="generateContactReport()">📥 İndir</button>
+                        </div>
+                    </div>
+
+                    <div class="advanced-reports">
+                        <h3>Gelişmiş Raporlar</h3>
+                        <div class="reports-advanced-grid">
+                            <div class="advanced-report-item">
+                                <h4>📊 Stok Durumu</h4>
+                                <p>Tüm paletlerin güncel envanter durumunu görüntüle</p>
+                                <button class="btn btn-primary btn-sm" onclick="generateStockReport()">Oluştur</button>
+                            </div>
+                            <div class="advanced-report-item">
+                                <h4>💹 Fiyat Trendleri</h4>
+                                <p>Fiyat değişim geçmişini analiz et</p>
+                                <button class="btn btn-primary btn-sm" onclick="generatePriceTrendsReport()">Oluştur</button>
+                            </div>
+                            <div class="advanced-report-item">
+                                <h4>🔥 En Popüler Paletler</h4>
+                                <p>En çok arama yapılan paletleri görmek</p>
+                                <button class="btn btn-primary btn-sm" onclick="generateTrendingReport()">Oluştur</button>
+                            </div>
+                            <div class="advanced-report-item">
+                                <h4>📧 Mesaj Analizi</h4>
+                                <p>Müşteri iletişim kalıplarını analiz et</p>
+                                <button class="btn btn-primary btn-sm" onclick="generateMessageAnalysis()">Oluştur</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Ayarlar Section -->
+                <section id="settings-section" class="admin-section">
+                    <h2>Ayarlar</h2>
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h3>👤 Yönetici Ekle</h3>
+                            <p>Yeni yönetici kullanıcısı oluştur</p>
+                            <button class="btn btn-primary" onclick="openAdminModal()">Yönetici Ekle</button>
+                        </div>
+                        <div class="settings-card">
+                            <h3>📋 Site Ayarları</h3>
+                            <p>Şirket adı, telefon ve email bilgilerini düzenle</p>
+                            <button class="btn btn-primary" onclick="openSiteSettingsModal()">Düzenle</button>
+                        </div>
+                        <div class="settings-card">
+                            <h3>💾 Veritabanı</h3>
+                            <p>Tüm verilerin yedeğini al</p>
+                            <button class="btn btn-primary" onclick="backupDatabase()">Yedek Al</button>
+                        </div>
+                        <div class="settings-card">
+                            <h3>🗑️ Veri Sil</h3>
+                            <p>Tüm mesajları sil (geri alınamaz)</p>
+                            <button class="btn btn-warning" onclick="deleteAllMessages()">Sil</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Mesaj Detayı Modal -->
+    <div id="messageModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Mesaj Detayları</h2>
+            <div id="messageDetails"></div>
+        </div>
+    </div>
+
+    <!-- Palet Modal -->
+    <div id="paletModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closePaletModal()">&times;</span>
+            <h2>Palet Ekle / Düzenle</h2>
+            <form id="paletForm" onsubmit="savePalet(event)">
+                <input type="hidden" id="paletId">
+                <div class="form-group">
+                    <label for="paletName">Palet Adı *</label>
+                    <input type="text" id="paletName" required>
+                </div>
+                <div class="form-group">
+                    <label for="paletDesc">Açıklama</label>
+                    <textarea id="paletDesc" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="paletPrice">Fiyat (₺) *</label>
+                        <input type="number" id="paletPrice" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="paletQuantity">Miktar</label>
+                        <input type="number" id="paletQuantity" min="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="paletLocation">Şehir</label>
+                        <input type="text" id="paletLocation">
+                    </div>
+                    <div class="form-group">
+                        <label for="paletCondition">Durumu</label>
+                        <select id="paletCondition">
+                            <option value="Çok İyi">Çok İyi</option>
+                            <option value="İyi">İyi</option>
+                            <option value="Orta">Orta</option>
+                            <option value="Kullanılabilir">Kullanılabilir</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="paletContact">İletişim Kişi</label>
+                        <input type="text" id="paletContact">
+                    </div>
+                    <div class="form-group">
+                        <label for="paletPhone">Telefon</label>
+                        <input type="tel" id="paletPhone">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="paletCategory">Kategori</label>
+                    <select id="paletCategory">
+                        <option value="">Seçiniz</option>
+                    </select>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" onclick="closePaletModal()">İptal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Kategori Modal -->
+    <div id="categoryModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeCategoryModal()">&times;</span>
+            <h2>Kategori Ekle</h2>
+            <form id="categoryForm" onsubmit="saveCategory(event)">
+                <div class="form-group">
+                    <label for="categoryName">Kategori Adı *</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+                <div class="form-group">
+                    <label for="categoryDesc">Açıklama</label>
+                    <textarea id="categoryDesc" rows="2"></textarea>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeCategoryModal()">İptal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Ekle Modal -->
+    <div id="adminModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeAdminModal()">&times;</span>
+            <h2>Yönetici Ekle</h2>
+            <form id="adminForm" onsubmit="addAdmin(event)">
+                <div class="form-group">
+                    <label for="adminUsername">Kullanıcı Adı *</label>
+                    <input type="text" id="adminUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Şifre *</label>
+                    <input type="password" id="adminPassword" required>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-primary">Ekle</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAdminModal()">İptal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Site Ayarları Modal -->
+    <div id="siteSettingsModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeSiteSettingsModal()">&times;</span>
+            <h2>Site Ayarları</h2>
+            <form id="siteSettingsForm" onsubmit="saveSiteSettings(event)">
+                <div class="form-group">
+                    <label for="companyName">Şirket Adı</label>
+                    <input type="text" id="companyName">
+                </div>
+                <div class="form-group">
+                    <label for="companyPhone">Telefon</label>
+                    <input type="tel" id="companyPhone">
+                </div>
+                <div class="form-group">
+                    <label for="companyEmail">Email</label>
+                    <input type="email" id="companyEmail">
+                </div>
+                <div class="form-group">
+                    <label for="companyAddress">Adres</label>
+                    <textarea id="companyAddress" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="companyHours">Çalışma Saatleri</label>
+                    <input type="text" id="companyHours" placeholder="09:00 - 18:00">
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeSiteSettingsModal()">İptal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
