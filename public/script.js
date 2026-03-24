@@ -1,5 +1,7 @@
 // Main Website JavaScript
 
+// Production API endpoint
+// Render backend'i
 const API_BASE = 'https://palet-site.onrender.com/api';
 
 // Notification helper
@@ -42,15 +44,15 @@ function displayPaletler(paletler) {
             day: 'numeric'
         });
         
-        // Palet resimlerini ayarla
+        // Palet resimlerini ayarla - Render'dan çek
         const palet_images = [
-            '/resim/cp1-palet-100x120-1.jpg',
-            '/resim/cp3-palet.jpg',
-            '/resim/epal-euro-palet-profil.jpg',
-            '/resim/euro-palet-izpas-palet.jpg',
-            '/resim/prs-7-pallet-1.jpg',
-            '/resim/IMG-20220725-WA0004.jpg',
-            '/resim/IMG-20220809-WA0002.jpg'
+            'https://palet-site.onrender.com/resim/cp1-palet-100x120-1.jpg',
+            'https://palet-site.onrender.com/resim/cp3-palet.jpg',
+            'https://palet-site.onrender.com/resim/epal-euro-palet-profil.jpg',
+            'https://palet-site.onrender.com/resim/euro-palet-izpas-palet.jpg',
+            'https://palet-site.onrender.com/resim/prs-7-pallet-1.jpg',
+            'https://palet-site.onrender.com/resim/IMG-20220725-WA0004.jpg',
+            'https://palet-site.onrender.com/resim/IMG-20220809-WA0002.jpg'
         ];
         
         const palet_image = palet_images[palet.id % palet_images.length];
