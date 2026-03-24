@@ -1,6 +1,6 @@
 // Main Website JavaScript
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = 'https://palet-site.onrender.com/api';
 
 // Notification helper
 function showNotification(message, type = 'success') {
